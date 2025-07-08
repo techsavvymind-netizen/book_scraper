@@ -1,0 +1,99 @@
+/* style.css (Same as previous example) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
+}
+
+.book-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-card h2 {
+    font-size: 1.5em;
+    margin-top: 0;
+    color: #0056b3;
+    min-height: 50px; /* Ensure consistent height for titles */
+}
+
+.book-card .price {
+    font-size: 1.2em;
+    color: #28a745;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.rating-stars {
+    margin-top: 10px;
+    color: #ffc107; /* Golden color for stars */
+}
+
+.rating-stars .fas, .rating-stars .far {
+    font-size: 1.2em;
+    margin: 0 2px;
+}
+
+.rating-stars .fas.filled {
+    color: #ffc107; /* Filled star color */
+}
+
+.rating-stars .far {
+    color: #ccc; /* Empty star color */
+}
+
+footer {
+    text-align: center;
+    padding: 1em 0;
+    margin-top: 20px;
+    background-color: #333;
+    color: white;
+    font-size: 0.9em;
+}
+
+/* Basic Responsiveness */
+@media (max-width: 768px) {
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .book-grid {
+        grid-template-columns: 1fr;
+    }
+    .book-card {
+        padding: 15px;
+    }
+}

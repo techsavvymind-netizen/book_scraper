@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Display (No Backend)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Our Book Collection</h1>
+    </header>
+    <main>
+        <div id="book-container" class="book-grid">
+            </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Book Display. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('books.csv')
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.trim().split('\n');
+                    const headers = lines[0].split(',');
+                    const books = [];
+
+                    for (let i = 1; i < lines.length; i++) {
+                        const values = lines[i].split(',');
+                        let book = {};
+                        for (let j = 0; j < headers.length; j++) {
+                            // Trim the header and the value to ensure clean keys and values
+                            book[headers[j].trim()] = values[j].trim();
+                        }
+                        books.push(book);
+                    }
+                    displayBooks(books);
+                })
+                .catch(error => {
+                    console.error('Error fetching or parsing CSV:', error);
+                    document.getElementById('book-container').innerHTML = '<p>Error loading books. Please check the console.</p>';
+                });
+        });
+
+        function displayBooks(books) {
+            const bookContainer = document.getElementById('book-container');
+            if (books.length === 0) {
+                bookContainer.innerHTML = '<p>No books to display.</p>';
+                return;
+            }
+
+            books.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.classList.add('book-card');
+
+                const title = document.createElement('h2');
+                // Accessing book.Title (capital T as in your CSV header)
+                title.textContent = book.Title;
+                bookCard.appendChild(title);
+
+                const price = document.createElement('p');
+                price.classList.add('price');
+                // Accessing book.Price (capital P as in your CSV header)
+                // And handling the 'Â£' symbol and parsing to float
+                let rawPrice = book.Price.replace('Â£', ''); // Remove the currency symbol
+                price.textContent = `Price: £${parseFloat(rawPrice).toFixed(2)}`;
+                bookCard.appendChild(price);
+
+                const ratingStars = document.createElement('div');
+                ratingStars.classList.add('rating-stars');
+
+                // FIX: Accessing book.rating_class instead of book.rating
+                const rating = parseInt(book.rating_class);
+                
+                // Ensure rating is a valid number between 0 and 5
+                const displayRating = Math.max(0, Math.min(5, isNaN(rating) ? 0 : rating));
+
+
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElement('i');
+                    star.classList.add(i < displayRating ? 'fas' : 'far', 'fa-star');
+                    ratingStars.appendChild(star);
+                }
+                bookCard.appendChild(ratingStars);
+
+                // Optional: You can also display availability if you want
+                const availability = document.createElement('p');
+                availability.textContent = `Availability: ${book.availability}`;
+                bookCard.appendChild(availability);
+
+                bookContainer.appendChild(bookCard);
+            });
+        }
+    </script>
+</body>
+</html>
